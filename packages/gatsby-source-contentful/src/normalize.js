@@ -204,6 +204,18 @@ exports.createContentTypeNodes = ({
   defaultLocale,
   locales,
 }) => {
+  console.log("contentTypeItem")
+  console.log(contentTypeItem)
+  console.log("restrictedNodeFields")
+  console.log(restrictedNodeFields)
+  console.log("conflictFieldPrefix")
+  console.log(conflictFieldPrefix)
+  console.log("entries")
+  console.log(entries)
+  console.log("defaultLocale")
+  console.log(defaultLocale)
+  console.log("locales")
+  console.log(locales)
   const contentTypeItemId = contentTypeItem.name
   locales.forEach(locale => {
     const mId = makeMakeId({ currentLocale: locale.code, defaultLocale })

@@ -1,6 +1,7 @@
 /* @flow */
 
 const url = require(`url`)
+const fs = require('fs')
 const chokidar = require(`chokidar`)
 const express = require(`express`)
 const graphqlHTTP = require(`express-graphql`)
@@ -20,7 +21,6 @@ const formatWebpackMessages = require(`react-dev-utils/formatWebpackMessages`)
 const chalk = require(`chalk`)
 const address = require(`address`)
 const sourceNodes = require(`../utils/source-nodes`)
-
 // const isInteractive = process.stdout.isTTY
 
 // Watch the static directory and copy files to public as they're added or
@@ -108,6 +108,16 @@ async function startServer(program) {
    * This behavior is disabled by default, but the ENABLE_REFRESH_ENDPOINT env var enables it
    * If no GATSBY_REFRESH_TOKEN env var is available, then no Authorization header is required
    **/
+  app.post(`/___contentful`, (req, res) => {
+    console.log('yo stuff is here')
+    fs.writeFileSync('src/special/contentful.json', req)
+  })
+
+  app.get(`/___contentful`, (req, res) => {
+    console.log('yo stuff is here GET')
+    fs.writeFileSync('src/special/contentful.json', req)
+  })
+
   app.post(`/__refresh`, (req, res) => {
     const enableRefresh = process.env.ENABLE_GATSBY_REFRESH_ENDPOINT
     const refreshToken = process.env.GATSBY_REFRESH_TOKEN
@@ -149,6 +159,7 @@ async function startServer(program) {
   // Check if the file exists in the public folder.
   app.get(`*`, (req, res, next) => {
     // Load file but ignore errors.
+    console.log('yo receiving requests')
     res.sendFile(
       directoryPath(`/public${decodeURIComponent(req.path)}`),
       err => {

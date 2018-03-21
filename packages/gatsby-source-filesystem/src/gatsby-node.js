@@ -2,6 +2,7 @@ const chokidar = require(`chokidar`)
 const fs = require(`fs`)
 
 const { createId, createFileNode } = require(`./create-file-node`)
+const normalize = require(`gatsby-source-contentful/normalize`)
 
 exports.sourceNodes = (
   { boundActionCreators, getNode, hasNodeChanged, reporter },
@@ -58,8 +59,35 @@ Please pick a path to an existing directory.
   })
 
   watcher.on(`change`, path => {
-    reporter.info(`changed file at ${path}`)
-    createAndProcessNode(path).catch(err => reporter.error(err))
+    if (path.indexOf('contentful.json') !== -1) {
+      normalize.createContentTypeNodes({
+        contentTypeItem: 'Section',
+        restrictedNodeFields: [
+          'children',
+          'contentful_id',
+          'fields',
+          'id',
+          'internal',
+          'parent'
+        ],
+        conflictFieldPrefix: 'contentful',
+        entries: entryList[i],
+        createNode,
+        resolvable: {},
+        foreignReferenceMap: {},
+        defaultLocale: 'en-US',
+        locales: [
+          {
+            code: 'en-US',
+            default: true,
+            name: 'US English',
+            fallbackCode: null
+          }
+        ],
+      })
+    } else {
+      createAndProcessNode(path).catch(err => reporter.error(err))
+    }
   })
 
   watcher.on(`unlink`, path => {

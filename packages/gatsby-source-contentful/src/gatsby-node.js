@@ -70,6 +70,11 @@ exports.sourceNodes = async (
     contentTypeItems,
   })
 
+  console.log('sync data')
+  console.log(currentSyncData)
+  console.log('contentTypeItems')
+  console.log(contentTypeItems)
+
   // Remove deleted entries & assets.
   // TODO figure out if entries referencing now deleted entries/assets
   // are "updated" so will get the now deleted reference removed.
